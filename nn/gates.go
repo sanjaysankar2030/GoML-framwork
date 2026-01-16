@@ -5,14 +5,16 @@ import (
 	"math"
 	"math/rand"
 )
-	/* var train = [][3]int{
-		{0, 0, 0},
-		{0, 1, 0},
-		{1, 0, 0},
-		{1, 1, 1},
-	}
-// * AND GATE */
 
+var train = [][3]int{
+	{0, 0, 0},
+	{0, 1, 0},
+	{1, 0, 0},
+	{1, 1, 1},
+}
+
+// * AND GATE
+/*
 // *OR GATE
 var train = [][3]int{
 	{0, 0, 0},
@@ -20,15 +22,15 @@ var train = [][3]int{
 	{1, 0, 1},
 	{1, 1, 1},
 }
-/* 
+*/
+/*
 //NAND GATE
 var train = [][3]int{
 	{0, 0, 1},
 	{0, 1, 1},
 	{1, 0, 1},
 	{1, 1, 0},
-}
- */
+} */
 
 func init() {
 	rand.Seed(69)
@@ -58,12 +60,12 @@ func cost(w1 float64, w2 float64, b float64) float64 {
 
 func Gates() {
 	fmt.Println(train)
-	var eps float64 = 1e+2
-	var rate float64 = 1e+2
+	var eps float64 = 1e-4
+	var rate float64 = 0.1
 	// Weight which is parameter which we tweek around with
-	var w1 float64 = rand_float()* float64(10.0) 
-	var w2 float64 = rand_float() *float64(10.0) 
-	var b float64 = rand_float() 
+	var w1 float64 = rand_float() * float64(0.5)
+	var w2 float64 = rand_float() * float64(0.5)
+	var b float64 = rand_float() * float64(0.5)
 	var d_cost float64 = 0
 	var b_cost float64 = 0
 	var bias float64 = 0
