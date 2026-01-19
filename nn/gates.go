@@ -6,34 +6,38 @@ import (
 	"math/rand"
 )
 
-var train = [][3]int{
+type Sample [3]float64
+
+// * AND GATE
+var and_train = []Sample{
 	{0, 0, 0},
 	{0, 1, 0},
 	{1, 0, 0},
 	{1, 1, 1},
 }
 
-// * AND GATE
-/*
 // *OR GATE
-var train = [][3]int{
+var or_train = []Sample{
 	{0, 0, 0},
 	{0, 1, 1},
 	{1, 0, 1},
 	{1, 1, 1},
 }
-*/
-/*
+
 //NAND GATE
-var train = [][3]int{
+var nand_train = []Sample{
 	{0, 0, 1},
 	{0, 1, 1},
 	{1, 0, 1},
 	{1, 1, 0},
-} */
+}
+
+var train []Sample
 
 func init() {
 	rand.Seed(69)
+	train = nand_train
+
 }
 
 func sigmoidf(x float64) float64 {
@@ -44,7 +48,7 @@ func rand_float() float64 {
 	return rand.Float64()
 }
 
-// Computes the cost
+// Computes the Cost
 func cost(w1 float64, w2 float64, b float64) float64 {
 	var result float64 = 0
 	for i := 0; i < len(train); i++ {
@@ -58,28 +62,7 @@ func cost(w1 float64, w2 float64, b float64) float64 {
 	return final
 }
 
-func Gates() {
-	fmt.Println(train)
-	var eps float64 = 1e-4
-	var rate float64 = 0.1
-	// Weight which is parameter which we tweek around with
-	var w1 float64 = rand_float() * float64(0.5)
-	var w2 float64 = rand_float() * float64(0.5)
-	var b float64 = rand_float() * float64(0.5)
-	var d_cost float64 = 0
-	var b_cost float64 = 0
-	var bias float64 = 0
-
-	for i := 0; i < 20000; i++ {
-		var c float64 = cost(w1, w2, b)
-		d_cost = (cost(w1+eps, w2, b) - c) / eps
-		b_cost = (cost(w1, w2+eps, b) - c) / eps
-		bias = (cost(w1, w2, b+eps) - c) / eps
-		w1 -= rate * d_cost
-		w2 -= rate * b_cost
-		b -= rate * bias
-		// fmt.Println("Cost: ", cost(w1, w2), "w1: ", w1, "w2: ", w2)
-	}
+func calc(w1 float64,w2 float64 ,b float64){
 	fmt.Println("------------------------")
 	fmt.Println("THE WEIGHT 1", w1)
 	fmt.Println("THE WEIGHT 2 ", w2)
@@ -91,4 +74,26 @@ func Gates() {
 			// fmt.Println(i, "|", j, "|", (sigmoidf(i*w1+j*w2+b)))
 		}
 	}
+func Gates() {
+	fmt.Println(train)
+	var eps float64 = 1e-4
+	var rate float64 = 0.1
+	// Weight which is parameter which we tweek around with
+	var w1 float64 = rand_float() * float64(0.5)
+	var w2 float64 = rand_float() * float64(0.5)
+	var b float64 = rand_float() * float64(0.5)
+	var d_cost float64 = 0
+	var b_cost float64 = 0
+	var bias float64 = 0
+	for i := 0; i < 20000; i++ {
+		var c float64 = cost(w1, w2, b)
+		d_cost = (cost(w1+eps, w2, b) - c) / eps
+		b_cost = (cost(w1, w2+eps, b) - c) / eps
+		bias = (cost(w1, w2, b+eps) - c) / eps
+		w1 -= rate * d_cost
+		w2 -= rate * b_cost
+		b -= rate * bias
+		// fmt.Println("Cost: ", cost(w1, w2), "w1: ", w1, "w2: ", w2)
+	}
+	calc(w1,w2,b)
 }
