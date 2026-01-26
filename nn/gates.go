@@ -74,6 +74,7 @@ func calc(w1 float64,w2 float64 ,b float64){
 			// fmt.Println(i, "|", j, "|", (sigmoidf(i*w1+j*w2+b)))
 		}
 	}
+	}
 func Gates() {
 	fmt.Println(train)
 	var eps float64 = 1e-4
