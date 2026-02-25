@@ -4,7 +4,11 @@
 	```	
 	git clone "https://github.com/sanjaysankar2030/GoML-framwork.git"
 	```
-2. Run the go build command  
+2. Change into the GoMl directory
+	```
+    cd .\GoML-framwork\
+	```
+4.  Run the go build command  
 	```	
 	go build .
 	```
