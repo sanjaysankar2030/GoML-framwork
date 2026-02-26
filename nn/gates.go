@@ -31,12 +31,17 @@ var nand_train = []Sample{
 	{1, 0, 1},
 	{1, 1, 0},
 }
-
+var xor_train = []Sample{
+	{0, 0, 0},
+	{0, 1, 1},
+	{1, 0, 1},
+	{1, 1, 0},
+}
 var train []Sample
 
 func init() {
 	rand.Seed(69)
-	train = nand_train
+	train = xor_train
 
 }
 
@@ -49,12 +54,12 @@ func rand_float() float64 {
 }
 
 // Computes the Cost
-func cost(w1 float64, w2 float64, b float64) float64 {
+func cost(xor *Xor) float64 {
 	var result float64 = 0
 	for i := 0; i < len(train); i++ {
 		x1 := float64(train[i][0])                  //the initial data feed to the model
 		x2 := float64(train[i][1])                  //the initial data feed to the model
-		var y float64 = sigmoidf(x1*w1 + x2*w2 + b) // Y is prediction or predicted output
+		var y float64 = forward(xor ,x1, x2) // Y is prediction or predicted output
 		d := y - float64(train[i][2])
 		result += d * d
 	}
