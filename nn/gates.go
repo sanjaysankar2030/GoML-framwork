@@ -54,12 +54,13 @@ func rand_float() float64 {
 }
 
 // Computes the Cost
-func cost(xor *Xor) float64 {
+func cost(xor *Xor,x1 float64,x2 float64,b float64) float64 {
+
 	var result float64 = 0
 	for i := 0; i < len(train); i++ {
 		x1 := float64(train[i][0])                  //the initial data feed to the model
 		x2 := float64(train[i][1])                  //the initial data feed to the model
-		var y float64 = forward(xor ,x1, x2) // Y is prediction or predicted output
+		var y float64 = forward(xor,x1, x2) // Y is prediction or predicted output
 		d := y - float64(train[i][2])
 		result += d * d
 	}
@@ -67,12 +68,40 @@ func cost(xor *Xor) float64 {
 	return final
 }
 
-func calc(w1 float64,w2 float64 ,b float64){
+func rand_Xor() Xor {
+    var xor Xor
+
+    xor.or_w1 = rand_float()
+    xor.or_w2 = rand_float()
+    xor.or_b  = rand_float()
+
+    xor.nand_w1 = rand_float()
+    xor.nand_w2 = rand_float()
+    xor.nand_b  = rand_float()
+
+    xor.and_w1 = rand_float()
+    xor.and_w2 = rand_float()
+    xor.and_b  = rand_float()
+
+    return xor
+}
+func print_Xor(xor Xor) {
+    fmt.Println(xor.or_w1 )
+    fmt.Println(xor.or_w2 )
+    fmt.Println(xor.or_b)
+    fmt.Println(xor.nand_w1 )
+    fmt.Println(xor.nand_w2 )
+    fmt.Println(xor.nand_b  )
+    fmt.Println(xor.and_w1 )
+    fmt.Println(xor.and_w2 )
+    fmt.Println(xor.and_b  )
+}
+func calc(xor *Xor,w1 float64,w2 float64 ,b float64){
 	fmt.Println("------------------------")
 	fmt.Println("THE WEIGHT 1", w1)
 	fmt.Println("THE WEIGHT 2 ", w2)
 	fmt.Println("----------------------------")
-	fmt.Println("The Final cost ", cost(w1, w2, b))
+	fmt.Println("The Final cost ", cost(xor,w1, w2, b))
 	for i := 0.0; i < 2; i++ {
 		for j := 0.0; j < 2; j++ {
 			fmt.Println(i, "|", j, "|", math.Round(sigmoidf(i*w1+j*w2+b)))
@@ -82,6 +111,7 @@ func calc(w1 float64,w2 float64 ,b float64){
 	}
 func Gates() {
 	fmt.Println(train)
+	var m Xor = rand_Xor() 
 	var eps float64 = 1e-4
 	var rate float64 = 0.1
 	// Weight which is parameter which we tweek around with
@@ -92,14 +122,16 @@ func Gates() {
 	var b_cost float64 = 0
 	var bias float64 = 0
 	for i := 0; i < 20000; i++ {
-		var c float64 = cost(w1, w2, b)
-		d_cost = (cost(w1+eps, w2, b) - c) / eps
-		b_cost = (cost(w1, w2+eps, b) - c) / eps
-		bias = (cost(w1, w2, b+eps) - c) / eps
+		var c float64 = cost(&m,w1, w2, b)
+		d_cost = (cost(&m,w1+eps, w2, b) - c) / eps
+		b_cost = (cost(&m,w1, w2+eps, b) - c) / eps
+		bias = (cost(&m,w1, w2, b+eps) - c) / eps
 		w1 -= rate * d_cost
 		w2 -= rate * b_cost
 		b -= rate * bias
 		// fmt.Println("Cost: ", cost(w1, w2), "w1: ", w1, "w2: ", w2)
 	}
-	calc(w1,w2,b)
+	calc(&m,w1,w2,b)
+	// print_Xor(m)
 }
+
